@@ -45,7 +45,8 @@ class Company
 			:KRFT => 'Kraft Foods Group Inc. (NASDAQ)',
 			:"VOD.L" => 'Vodafone Group plc (LSE)',
 			:KO => 'The Coca-Cola Company (NYSE)',
-			:PEP => 'Pepsico Inc. (NYSE)'
+			:PEP => 'Pepsico Inc. (NYSE)',
+			:GLW => 'Corning Inc.'
 		}
 		companies.each do |i, v|
 			quote = YahooStock::Quote.new(:stock_symbols => i)
