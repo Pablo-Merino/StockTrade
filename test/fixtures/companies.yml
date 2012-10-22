@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  symbol: MyString
+  share_price: 1
+
+two:
+  name: MyString
+  symbol: MyString
+  share_price: 1

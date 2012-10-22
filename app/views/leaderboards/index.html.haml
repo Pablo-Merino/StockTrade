@@ -1,0 +1,21 @@
+%h2 Leaderboards
+%table{:style=>"width:100%"}
+	%thead
+		%tr
+			%th Username
+			%th Money
+			%th Wealth
+			%th Shares
+	%tbody			
+		- @users.each do |user|
+			%tr
+				%td= link_to user.username, user
+				%td= humanized_money_with_symbol user.money
+				- if user.shares.empty?
+					%td= humanized_money_with_symbol(Money.new(0))
+				- else
+					%td= humanized_money_with_symbol(Money.new(user.shares.map {|s| s.price.cents }.sum)) 
+				%td= user.shares.count
+
+= will_paginate @users
+

@@ -1,0 +1,41 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+ */
+
+li.just_text {
+	color: white; display: block; font-size: 13px; font-weight: bold; height: 45px; line-height: 45px; padding: 0 15px;
+}
+
+.pagination .previous_page {
+	float:left;
+}
+
+.pagination .next_page {
+	float: right;
+}
+
+.pagination .current {
+	font-weight: bold;
+}
+
+.pagination {
+	text-align: center;
+	margin-top:20px;
+}
+.portfolio_chart canvas, .company_close_chart canvas, .chart canvas {
+	border:1px solid #DDD;
+	background-color: #EEE;
+	padding-top:10px;
+	margin-bottom:15px;
+}
+

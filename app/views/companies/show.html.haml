@@ -1,0 +1,23 @@
+%h1= "#{@company.name} – #{@company.symbol}"
+.row
+	.five.columns
+		.panel
+			%h5= "#{@company.name} (#{@company.symbol}, Share price: #{humanized_money_with_symbol @company.share_price})"
+			= form_for Share.new, :url => buy_shares_path(@company), :method => :put do |f|
+				= f.label :amount
+				= f.number_field :amount, :min => 1, :max => Share.max(@company.share_price, current_user.money)
+				= f.submit "Buy shares!", :class => "button"
+		.panel
+			%h5= "Yesterday's stats (#{(Date.today-1).strftime("%B %e, %Y")})"
+			%ul
+				%li= "Open price: #{humanized_money_with_symbol Money.parse @yesterday_stats[1]}"
+				%li= "Highest price: #{humanized_money_with_symbol Money.parse @yesterday_stats[2]}"
+				%li= "Lowest price: #{humanized_money_with_symbol Money.parse @yesterday_stats[3]}"
+				%li= "Close price: #{humanized_money_with_symbol Money.parse @yesterday_stats[4]}"
+		.company_close_chart
+			%span{:"data-min" => @history.first}="#{@history.join(',')}"
+	.seven.columns
+		%h5= "Articles about #{@company.name}"
+		%ul
+			- @articles.each do |article|
+				%li= link_to article.title, article.url, :target => :_blank

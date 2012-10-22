@@ -1,0 +1,6 @@
+.bundle
+*.gem
+Gemfile.lock
+.rvmrc
+*.sw[nop]
+log/*

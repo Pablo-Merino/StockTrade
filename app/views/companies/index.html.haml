@@ -1,0 +1,16 @@
+%h2 Companies
+%table{:style=>"width:100%"}
+	%thead
+		%tr
+			%th Name
+			%th Symbol
+			%th Share price
+	%tbody			
+		- @companies.each do |company|
+			%tr
+				%td= link_to company.name, company
+				%td= company.symbol
+				%td= humanized_money_with_symbol company.share_price
+
+= will_paginate @companies
+%div{:style=>"margin:20px"}

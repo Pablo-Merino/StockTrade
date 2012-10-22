@@ -1,0 +1,48 @@
+!!!
+%head
+	%meta{:charset => "utf-8"}
+	%title StockTrade
+	=stylesheet_link_tag    "application" 
+	=javascript_include_tag "application" 
+	=csrf_meta_tags
+
+%body
+	%nav.top-bar
+		%ul
+			%li.name
+				%h1
+					= link_to "StockTrade", root_path
+		%section
+			- if user_signed_in?
+
+				%ul.left
+					%li.divider
+					%li= link_to "Companies", companies_path
+					%li.divider
+					%li= link_to "Portfolio", dashboard_path
+					%li.divider
+					%li= link_to "Leaderboards", leaderboards_path
+					%li.divider
+
+				%ul.right
+
+					%li.divider
+					%li= link_to "About", about_path
+					%li.divider
+					%li.just_text= "Hello #{current_user.username}. You have #{humanized_money_with_symbol current_user.current_money}"
+					%li.divider
+					%li= link_to('Logout', destroy_user_session_path, :method => :delete)
+			- else
+				%ul.right
+					%li.divider
+					%li= link_to "About", about_path
+					%li.divider
+					%li= link_to "Sign in", new_user_session_path
+
+					
+	.row
+		- if notice
+			.alert-box.notice= notice
+		- if alert
+			.alert-box.alert= alert
+		=yield

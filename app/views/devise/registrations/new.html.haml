@@ -1,0 +1,38 @@
+.centered_container{:style=>"width:600px; margin:0 auto"}
+	%h2{:style=>"text-align:center"} Sign up
+
+	.panel{:style=>'width:600px'}
+		= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|
+			%div
+				.row.collapse
+					.four.mobile-one.columns
+						%span.prefix= "Username"
+					.eight.mobile-one.columns
+						= f.text_field :username
+			%div
+				.row.collapse
+					.four.mobile-one.columns
+						%span.prefix= "E-mail"
+					.eight.mobile-one.columns
+						= f.email_field :email
+			%div
+				.row.collapse
+					.four.mobile-one.columns
+						%span.prefix= "Password"
+					.eight.mobile-one.columns
+						= f.password_field :password
+			%div
+				.row.collapse
+					.four.mobile-one.columns
+						%span.prefix= "Password Confirmation"
+					.eight.mobile-one.columns
+						= f.password_field :password_confirmation
+			- if devise_mapping.rememberable?
+				%div
+					= f.label :remember_me do
+						= f.check_box :remember_me
+						Remember me
+
+			%div{:style=>"text-align:center"}= f.submit "Sign up", :class => "success button"
+			%br/
+			%div{:style=>"text-align:center"}= link_to 'Sign in', new_session_path(resource_name), :class => "small secondary button"

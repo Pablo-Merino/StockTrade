@@ -1,0 +1,20 @@
+%h1= "#{@user.username}'s portfolio"
+.row
+	.three.columns
+		%h5= "About #{@user.username}"
+		%ul
+			%li= "Money: #{humanized_money_with_symbol @user.money}"
+			%li= "Wealth: #{humanized_money_with_symbol Money.new @wealth }"
+		.portfolio_chart
+			%span{:"data-min" => "#{@user.transactions.map { |t| t.user_money_after.cents }.min}" }= "#{@user.transactions.map { |t| t.user_money_after.cents }.reverse.join(',')}"
+	.nine.columns
+		%h5 Shares
+		- if @companies.empty?
+			.alert-box
+				= "#{@user.username} hasn't bought any shares"
+		- else
+			- @companies.each do |company|
+				.alert-box.secondary
+					= "#{company.name} (#{company.shares.map { |s| s if s.user == current_user and s.company == company }.count} shares, paid #{humanized_money_with_symbol(Money.new(@user.shares.where(company: company).count * company.share_price.cents))})"
+	
+		
