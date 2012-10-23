@@ -2,6 +2,7 @@ class DashboardController < ApplicationController
 	before_filter :authenticate_user!
 	def index
 		@companies = current_user.shares.map { |s| s.company }.uniq
+		@transactions = current_user.transactions.paginate(:page => params[:transactions_page], :per_page => 5)
 	end
 
 	def show

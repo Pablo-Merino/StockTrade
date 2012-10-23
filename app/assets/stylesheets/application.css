@@ -39,3 +39,9 @@ li.just_text {
 	margin-bottom:15px;
 }
 
+.estimation {
+	margin-top:10px;
+	margin-bottom:0;
+	font-weight: bold;
+	font-size: 20px;
+}

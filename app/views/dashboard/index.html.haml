@@ -22,21 +22,24 @@
 						= f.label :amount
 						= f.number_field :amount, :min => 1, :max => company.shares.map { |s| s if s.user == current_user and s.company == company }.count
 						= f.submit "Sell shares!", :class => "button"
+						.cost_estimation{:"data-share_cost" => company.share_price.cents}
+							%p.estimation
 
 	.six.columns
 	
 		%h1 Transactions
-		%h6 Last 10 days graph
+		%h5 Last 10 days graph
 		.chart
 			%span{:style=>"height:200px", :"data-min" => "#{current_user.transactions.limit(10).map { |t| t.user_money_after.cents }.min}" }= "#{current_user.transactions.limit(10).map { |t| t.user_money_after.cents }.reverse.join(',')}"
 
-		- if current_user.transactions.empty?
+		- if @transactions.empty?
 			.alert-box.secondary
 				= "You haven't made any transactions"
 		- else
 			%ul
 
-				- current_user.transactions.each do |transaction|
+				- @transactions.each do |transaction|
 					.alert-box.secondary
 						= "#{transaction.type == :buy ? "Spent" : "Won"} #{humanized_money_with_symbol transaction.amount} #{transaction.type == :buy ? "buying" : "selling"} #{transaction.shares_amount} #{transaction.company.name} #{transaction.shares_amount == 1 ? "share" : "shares"}"
 
+				= will_paginate @transactions, :param_name => :transactions_page

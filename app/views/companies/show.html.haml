@@ -8,6 +8,8 @@
 					="Amount (you can buy #{Share.max(@company.share_price, current_user.money)} #{Share.max(@company.share_price, current_user.money) == 1 ? "share" : "shares"})"
 				= f.number_field :amount, :min => 1, :max => Share.max(@company.share_price, current_user.money)
 				= f.submit "Buy shares!", :class => "button"
+				.cost_estimation{:"data-share_cost" => @company.share_price.cents}
+					%p.estimation
 		.panel
 			%h5= "Yesterday's stats (#{(Date.today-1).strftime("%B %e, %Y")})"
 			%ul

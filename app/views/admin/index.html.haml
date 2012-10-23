@@ -3,3 +3,12 @@
 %ul
 	%li= link_to "Users", admin_users_path
 	%li= link_to "Companies", admin_companies_path
+
+
+.panel
+	%h5 Stats
+	%ul
+		%li= "Money spent: #{humanized_money_with_symbol Money.new @money_spent}"
+		%li= "Money won: #{humanized_money_with_symbol Money.new @money_won}"
+		%li= "Money moved: #{humanized_money_with_symbol Money.new @money_moved}"
+		

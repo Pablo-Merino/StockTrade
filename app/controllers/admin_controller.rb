@@ -2,7 +2,9 @@ class AdminController < ApplicationController
 	before_filter :check_admin
 
 	def index
-
+		@money_spent = Transaction.where(:type => :buy).all.entries.map { |t| t.amount.cents }.inject(:+)
+		@money_won = Transaction.where(:type => :sell).all.entries.map { |t| t.amount.cents }.inject(:+)
+		@money_moved = Transaction.all.entries.map { |t| t.amount.cents }.inject(:+)
 	end
 
 	def users
