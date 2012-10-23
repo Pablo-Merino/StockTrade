@@ -6,7 +6,7 @@
 			%li= "Money: #{humanized_money_with_symbol @user.money}"
 			%li= "Wealth: #{humanized_money_with_symbol Money.new @wealth }"
 		.portfolio_chart
-			%span{:"data-min" => "#{@user.transactions.map { |t| t.user_money_after.cents }.min}" }= "#{@user.transactions.map { |t| t.user_money_after.cents }.reverse.join(',')}"
+			%span{:style=>"height:200px", :"data-min" => "#{@user.transactions.limit(10).map { |t| t.user_money_after.cents }.min}" }= "#{@user.transactions.limit(10).map { |t| t.user_money_after.cents }.reverse.join(',')}"
 	.nine.columns
 		%h5 Shares
 		- if @companies.empty?

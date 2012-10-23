@@ -1,0 +1,24 @@
+%h1 Admin panel
+- @users.each do |user|
+	.panel
+		%h5= "#{user.username} (#{user.email} | #{humanized_money_with_symbol user.money})"
+
+		.row
+			.six.columns
+				%h6 Money operations
+				= form_for user, :url => admin_set_money_path(user), :method => :put do |f|
+					= f.label :money do 
+						Money (in cents)
+					= f.number_field :money, :value => user.money.cents
+					= f.submit "Set money", :class => "button small", :confirm => "Are you sure you want to set the money?"
+			.six.columns
+				%h6 General operations
+				= form_for user, :url => admin_destroy_user_path(user), :method => :delete do |f|
+					= f.submit "Destroy user", :class => "button alert small", :confirm => "Are you sure you want to destroy the user?"
+
+				= form_for user, :url => admin_toggle_admin_path(user), :method => :put do |f|
+					- if user.admin
+						= f.submit "Demote user", :class => "button alert small", :confirm => "Are you sure you want to demote the user?"
+					- else
+						= f.submit "Promote user", :class => "button small", :confirm => "Are you sure you want to promote the user?"
+= will_paginate @users

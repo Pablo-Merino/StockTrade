@@ -26,8 +26,10 @@
 	.six.columns
 	
 		%h1 Transactions
+		%h6 Last 10 days graph
 		.chart
-			%span{:style=>"height:200px", :"data-min" => "#{current_user.transactions.map { |t| t.user_money_after.cents }.min}" }= "#{current_user.transactions.map { |t| t.user_money_after.cents }.reverse.join(',')}"
+			%span{:style=>"height:200px", :"data-min" => "#{current_user.transactions.limit(10).map { |t| t.user_money_after.cents }.min}" }= "#{current_user.transactions.limit(10).map { |t| t.user_money_after.cents }.reverse.join(',')}"
+
 		- if current_user.transactions.empty?
 			.alert-box.secondary
 				= "You haven't made any transactions"

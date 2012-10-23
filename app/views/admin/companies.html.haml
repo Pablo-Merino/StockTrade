@@ -1,0 +1,23 @@
+%h1 Admin panel
+.row
+	.three.columns
+		.panel
+			%h5 New company
+			= form_for Company.new, :url => admin_new_company_path do |f|
+				= f.label :name
+				= f.text_field :name
+
+				= f.label :symbol
+				= f.text_field :symbol
+
+				= f.submit 'Save', :class => 'button small'
+		= form_for Company.new, :url => admin_update_company_shares_path, :method => :put do |f|
+			= f.submit 'Update company shares', :class => 'button small'
+	.nine.columns
+		- @companies.each do |company|
+			.panel
+				%h5= link_to "#{company.name} (#{company.symbol} | Share: #{humanized_money_with_symbol company.share_price} | Old share: #{humanized_money_with_symbol company.old_share_price})", admin_edit_company_path(company)
+				= form_for company, :url => admin_destroy_company_path(company), :method => :delete do |f|
+					= f.submit "Destroy company", :class => "button alert small", :confirm => "Are you sure you want to destroy the company?"
+
+		= will_paginate @companies

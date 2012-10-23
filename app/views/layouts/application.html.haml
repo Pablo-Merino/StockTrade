@@ -25,7 +25,9 @@
 					%li.divider
 
 				%ul.right
-
+					- if current_user.admin
+						%li.divider
+						%li= link_to "Admin", admin_path
 					%li.divider
 					%li= link_to "About", about_path
 					%li.divider

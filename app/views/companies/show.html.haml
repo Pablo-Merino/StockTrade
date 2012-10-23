@@ -4,7 +4,8 @@
 		.panel
 			%h5= "#{@company.name} (#{@company.symbol}, Share price: #{humanized_money_with_symbol @company.share_price})"
 			= form_for Share.new, :url => buy_shares_path(@company), :method => :put do |f|
-				= f.label :amount
+				= f.label :amount do
+					="Amount (you can buy #{Share.max(@company.share_price, current_user.money)} #{Share.max(@company.share_price, current_user.money) == 1 ? "share" : "shares"})"
 				= f.number_field :amount, :min => 1, :max => Share.max(@company.share_price, current_user.money)
 				= f.submit "Buy shares!", :class => "button"
 		.panel

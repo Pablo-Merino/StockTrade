@@ -10,7 +10,19 @@
 			%tr
 				%td= link_to company.name, company
 				%td= company.symbol
-				%td= humanized_money_with_symbol company.share_price
+				%td
+					- if company.share_price.nil? or company.old_share_price.nil?
+						= "Updating..."
+					- else
+						- if company.share_price == company.old_share_price
+							= "#{humanized_money_with_symbol company.share_price}"
+						- else
+							- if company.share_price < company.old_share_price
+								%span{:style=>"color:red"}="#{humanized_money_with_symbol company.share_price} ↓ (was #{humanized_money_with_symbol company.old_share_price})"
+							- elsif company.share_price == company.old_share_price
+								%span{:style=>"color:#C76501"}="#{humanized_money_with_symbol company.share_price} = (was #{humanized_money_with_symbol company.old_share_price})"
+							- else
+								%span{:style=>"color:green"}="#{humanized_money_with_symbol company.share_price} ↑ (was #{humanized_money_with_symbol company.old_share_price})"
 
 = will_paginate @companies
 %div{:style=>"margin:20px"}
