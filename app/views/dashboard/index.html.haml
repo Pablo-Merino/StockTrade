@@ -5,25 +5,26 @@
 			.alert-box.secondary
 				= "You haven't bought any shares"
 		- else
-			- @companies.each do |company|
-				.panel
-					%h5= "#{company.name} (#{current_user.shares.where(company: company).count} shares, paid #{humanized_money_with_symbol(Money.new(current_user.shares.where(company: company).count * company.share_price.cents))})"
-					%ul
-						%li= "Price paid: #{humanized_money_with_symbol current_user.shares.where(company: company).first.price}"
-						%li
-							Current price:
-							- if company.share_price < current_user.shares.where(company: company).first.price
-								%span{:style=>"color:red"}="#{humanized_money_with_symbol company.share_price} ↓"
-							- elsif company.share_price == current_user.shares.where(company: company).first.price
-								%span{:style=>"color:#C76501"}="#{humanized_money_with_symbol company.share_price} ="
-							- else
-								%span{:style=>"color:green"}="#{humanized_money_with_symbol company.share_price} ↑"
-					= form_for Share.new, :url => sell_shares_path(company), :method => :delete do |f|
-						= f.label :amount
-						= f.number_field :amount, :min => 1, :max => company.shares.map { |s| s if s.user == current_user and s.company == company }.count
-						= f.submit "Sell shares!", :class => "button"
-						.cost_estimation{:"data-share_cost" => company.share_price.cents}
-							%p.estimation
+			.company_list
+				- @companies.each do |company|
+					.panel{:class=>"#{company.symbol.gsub(".","")}"}
+						%h5= "#{company.name} (#{current_user.shares.where(company: company).count} shares, paid #{humanized_money_with_symbol(Money.new(current_user.shares.where(company: company).count * company.share_price.cents))})"
+						%ul
+							%li= "Price paid: #{humanized_money_with_symbol current_user.shares.where(company: company).first.price}"
+							%li
+								Current price:
+								- if company.share_price < current_user.shares.where(company: company).first.price
+									%span{:style=>"color:red"}="#{humanized_money_with_symbol company.share_price} ↓"
+								- elsif company.share_price == current_user.shares.where(company: company).first.price
+									%span{:style=>"color:#C76501"}="#{humanized_money_with_symbol company.share_price} ="
+								- else
+									%span{:style=>"color:green"}="#{humanized_money_with_symbol company.share_price} ↑"
+						= form_for Share.new, :url => sell_shares_path(company), :method => :delete do |f|
+							= f.label :amount
+							= f.number_field :amount, :min => 1, :max => company.shares.map { |s| s if s.user == current_user and s.company == company }.count, :onChange => "updatePortfolioWinnings($(this))"
+							= f.submit "Sell shares!", :class => "button"
+							.win_estimation{:"data-share_cost" => company.share_price.cents}
+								%p.estimation
 
 	.six.columns
 	
@@ -43,3 +44,21 @@
 						= "#{transaction.type == :buy ? "Spent" : "Won"} #{humanized_money_with_symbol transaction.amount} #{transaction.type == :buy ? "buying" : "selling"} #{transaction.shares_amount} #{transaction.company.name} #{transaction.shares_amount == 1 ? "share" : "shares"}"
 
 				= will_paginate @transactions, :param_name => :transactions_page
+
+
+
+:javascript
+	var updatePortfolioWinnings = function(element) {
+		var goodClass = element.parent().parent().attr('class').replace(' panel', '');
+		console.log(goodClass);
+		$("."+goodClass + ' .win_estimation p.estimation').append(" would get you "+accounting.formatMoney(parseInt(element.attr('value')) * parseInt($("."+goodClass + ' div.win_estimation').data('share_cost'))/100));
+
+		$("."+goodClass + ' .win_estimation p.estimation').text(parseInt(element.attr('value')));
+		if(parseInt(element.attr('value')) == 1) {
+			$("."+goodClass + ' .win_estimation p.estimation').append(" share");
+		} else {
+			$("."+goodClass + ' .win_estimation p.estimation').append(" shares");
+		}
+			
+		$("."+goodClass + ' .win_estimation p.estimation').append(" would get you "+accounting.formatMoney(parseInt(element.attr('value')) * parseInt($("."+goodClass + ' div.win_estimation').data('share_cost'))/100));
+	}
