@@ -8,7 +8,7 @@
 			.company_list
 				- @companies.each do |company|
 					.panel{:class=>"#{company.symbol.gsub(".","")}"}
-						%h5= "#{company.name} (#{current_user.shares.where(company: company).count} shares, paid #{humanized_money_with_symbol(Money.new(current_user.shares.where(company: company).count * company.share_price.cents))})"
+						%h5= "#{company.name} (#{current_user.shares.where(company: company).count} shares, paid #{humanized_money_with_symbol(Money.new(current_user.shares.where(company: company).count * current_user.shares.where(company: company).first.price.cents))})"
 						%ul
 							%li= "Price paid: #{humanized_money_with_symbol current_user.shares.where(company: company).first.price}"
 							%li
