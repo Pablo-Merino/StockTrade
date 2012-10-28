@@ -35,6 +35,7 @@ gem 'feedzirra'
 gem 'girl_friday'
 gem 'redis'
 gem 'rdiscount'
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

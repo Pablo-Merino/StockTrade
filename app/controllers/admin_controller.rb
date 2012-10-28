@@ -27,7 +27,7 @@ class AdminController < ApplicationController
 	end
 
 	def destroy_company
-		@company = Company.find_by(symbol: params[:id])
+		@company = Company.find_by(slugged_symbol: params[:id])
 		if @company.destroy
 			redirect_to :back, :notice => "Destroyed succesfully"
 		else
@@ -41,11 +41,11 @@ class AdminController < ApplicationController
 	end
 
 	def edit_company
-		@company = Company.find_by(symbol: params[:id])
+		@company = Company.find_by(slugged_symbol: params[:id])
 	end
 
 	def update_company
-		@company = Company.find_by(symbol: params[:id])
+		@company = Company.find_by(slugged_symbol: params[:id])
 		if @company.update_attributes(params[:company])
 			redirect_to admin_companies_path, :notice => "Updated succesfully"
 		else

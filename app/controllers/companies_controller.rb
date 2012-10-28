@@ -7,16 +7,16 @@ class CompaniesController < ApplicationController
 
 	def show
 		require 'yahoo_stock'
-		@company = Company.find_by(symbol: params[:id])
-		@articles = Feedzirra::Feed.fetch_and_parse("http://finance.yahoo.com/rss/headline?s=#{@company.symbol}").entries
-		stock_history = YahooStock::History.new(:stock_symbol => @company.symbol, :start_date => Date.today-50, :end_date => Date.today-1).results(:to_array).output
+		@company = Company.find_by(slugged_symbol: params[:id])
+		@articles = Feedzirra::Feed.fetch_and_parse("http://finance.yahoo.com/rss/headline?s=#{@company.slugged_symbol}").entries
+		stock_history = YahooStock::History.new(:stock_symbol => @company.slugged_symbol, :start_date => Date.today-50, :end_date => Date.today-1).results(:to_array).output
 		@history = stock_history.map { |h| h[3] }
 		@yesterday_stats = stock_history.last
 	end
 
 	def buy
 
-		@company = Company.find_by(symbol: params[:id])
+		@company = Company.find_by(slugged_symbol: params[:id])
 		amount = params[:share][:amount].to_i
 
 		if amount >= 1
@@ -60,7 +60,7 @@ class CompaniesController < ApplicationController
 
 	def sell
 
-		@company = Company.find_by(symbol: params[:id])
+		@company = Company.find_by(slugged_symbol: params[:id])
 		amount = params[:share][:amount].to_i
 		user_shares = @company.shares.map { |s| s if s.user == current_user and s.company == @company }.count
 		if amount >= 1
