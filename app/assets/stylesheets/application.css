@@ -45,3 +45,7 @@ li.just_text {
 	font-weight: bold;
 	font-size: 20px;
 }
+pre.backtrace {
+	font-size: 11px;
+	overflow:scroll;
+}

@@ -37,9 +37,10 @@
 			.alert-box.secondary
 				= "You haven't made any transactions"
 		- else
-			%ul
 
+			%ul
 				- @transactions.each do |transaction|
+
 					.alert-box.secondary
 						= "#{transaction.type == :buy ? "Spent" : "Won"} #{humanized_money_with_symbol transaction.amount} #{transaction.type == :buy ? "buying" : "selling"} #{transaction.shares_amount} #{transaction.company.name} #{transaction.shares_amount == 1 ? "share" : "shares"}"
 

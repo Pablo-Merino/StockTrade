@@ -69,3 +69,9 @@ production:
       hosts:
         - <%= JSON.parse(ENV['VCAP_SERVICES'])['mongodb-1.8'].first['credentials']['hostname'] %>:<%= JSON.parse( ENV['VCAP_SERVICES'] )['mongodb-1.8'].first['credentials']['port'] %>
 <% end %>
+
+proxied:
+  sessions:
+    default:
+      uri: mongodb://b12b7cfc-c9ea-406f-803d-40004a7726e3:93b64d64-afef-4087-9798-7e12ca735e5b@localhost:10001/db
+

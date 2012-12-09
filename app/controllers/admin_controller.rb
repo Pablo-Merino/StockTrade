@@ -104,4 +104,12 @@ class AdminController < ApplicationController
 		end
 	end
 
+	def exceptions_index
+		@exceptions = CompanyException.paginate(:page => params[:page], :per_page => 5)
+	end
+
+	def exceptions_show
+		@exception = CompanyException.find(params[:id])
+	end
+
 end

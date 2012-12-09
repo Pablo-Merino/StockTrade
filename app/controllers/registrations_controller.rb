@@ -1,11 +1,8 @@
 class RegistrationsController < Devise::RegistrationsController
 	def new
-		
-		if params[:code] != "3wdt7bpc"
-			redirect_to root_path, :alert => 'Wrong invite code'
-		else
-			super
-		end
+
+		super
+
 	end
 
 	def create

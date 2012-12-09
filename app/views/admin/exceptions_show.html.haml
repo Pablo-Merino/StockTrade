@@ -1,0 +1,9 @@
+.panel
+	%h5= "Exception: #{@exception.id} (#{@exception.created_at})"
+	%ul
+		%li= link_to "Company: #{@exception.company.name} (#{@exception.company.symbol})", admin_edit_company_path(@exception.company)
+		%li= "User: #{@exception.user.username}"
+	%h5 Backtrace
+	%pre.backtrace="#{@exception.exception_backtrace.join("\n")}"
+	%h5 Message
+	%pre.backtrace="#{@exception.exception_message}"

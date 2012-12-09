@@ -19,7 +19,7 @@
 $(function() {
 
 	$('.chart span').peity('line', { height: 200, width:450});	
-	$('.company_close_chart span').peity('line', { height: 200, width:372, min: $('.company_close_chart span').data('min')});
+	$('.company_close_chart span').peity('line', { height: 200, width:530, min: $('.company_close_chart span').data('min')});
 	$('.portfolio_chart span').peity('line', { height: 50, width:200, min: $('.porftolio_chart span').data('min')});
 
 	updateShareTotalCost();

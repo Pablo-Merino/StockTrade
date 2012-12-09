@@ -1,4 +1,11 @@
 %h2 Companies
+= form_for Company.new, :url => search_gateway_path do |f|
+	.row.collapse
+		.ten.mobile-three.columns
+			= f.text_field :search, :value => params[:id]
+		.two.mobile-one.columns
+			= f.submit "Search", :class => "button expand postfix"
+
 %table{:style=>"width:100%"}
 	%thead
 		%tr

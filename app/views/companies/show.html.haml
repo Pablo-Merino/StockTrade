@@ -17,9 +17,10 @@
 				%li= "Highest price: #{humanized_money_with_symbol Money.parse @yesterday_stats[2]}"
 				%li= "Lowest price: #{humanized_money_with_symbol Money.parse @yesterday_stats[3]}"
 				%li= "Close price: #{humanized_money_with_symbol Money.parse @yesterday_stats[4]}"
+		
+	.seven.columns
 		.company_close_chart
 			%span{:"data-min" => @history.first}="#{@history.join(',')}"
-	.seven.columns
 		%h5= "Articles about #{@company.name}"
 		%ul
 			- @articles.each do |article|

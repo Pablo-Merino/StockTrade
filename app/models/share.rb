@@ -1,5 +1,7 @@
 class Share
 	include Mongoid::Document
+	include Mongoid::Timestamps
+
 	field :price, type: Money
 
 	belongs_to :company

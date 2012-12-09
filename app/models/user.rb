@@ -1,5 +1,7 @@
 class User
 	include Mongoid::Document
+	include Mongoid::Timestamps
+
 	# Include default devise modules. Others available are:
 	# :token_authenticatable, :confirmable,
 	# :lockable, :timeoutable and :omniauthable
@@ -54,7 +56,7 @@ class User
 
 	has_many :shares
 	has_many :transactions
-
+	has_many :company_exceptions
 	
 
 	def current_money

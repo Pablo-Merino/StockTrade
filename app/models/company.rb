@@ -1,5 +1,7 @@
 class Company
 	include Mongoid::Document
+	include Mongoid::Timestamps
+
 	field :name, type: String
 	field :symbol, type: String
 	field :slugged_symbol, type: String
@@ -8,9 +10,12 @@ class Company
 	field :old_share_price,				:type => Money
 
 	validates_uniqueness_of :symbol
+	validates_uniqueness_of :slugged_symbol
+	validates_uniqueness_of :name
 
 	has_many :shares
 	has_many :transactions
+	has_many :company_exception
 
 	default_scope desc(:share_price)
 
@@ -22,15 +27,21 @@ class Company
 
 		CSV.parse(response) do |row|
 			unless Money.parse(row[2].strip).cents == 0
-				c = Company.find_or_create_by(symbol:row[0].strip)
+
+				begin
+					@c = Company.find_by(symbol:row[0].strip)
+				rescue Mongoid::Errors::DocumentNotFound
+					@c = Company.new
+				end
 				
-				c.name = row[1].strip
+				@c.symbol = row[0].strip
+				@c.name = row[1].strip
 							
-				c.share_price = Money.parse(row[2].strip)	
-				c.old_share_price = Money.parse(row[2].strip)	
+				@c.share_price = Money.parse(row[2].strip)	
+				@c.old_share_price = Money.parse(row[2].strip)	
 				
 
-				c.save
+				@c.save if @c.valid?
 			end
 				
 		end
@@ -52,7 +63,7 @@ class Company
 		self.symbol =~ /(.*)(\/|\^)/
 		new_symbol = $1
 		if new_symbol.nil?
-			self.slugged_symbol = self.symbol.gsub("^", "").gsub("/", "").strip	
+			self.slugged_symbol = self.symbol.gsub("^", "").gsub("/", ".").strip	
 		else
 			if self.symbol == "BRK/A"
 				self.slugged_symbol = "BRK-A"
@@ -64,5 +75,7 @@ class Company
 		end
 	end
 
+	def search
+	end
 
 end

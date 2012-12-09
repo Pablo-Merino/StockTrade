@@ -1,0 +1,8 @@
+%h1 Admin panel
+- @exceptions.each do |exception|
+	.panel
+		%h5= link_to "Exception: #{exception.id} (#{exception.created_at})", admin_exceptions_show_path(exception)
+		%p= "Company: #{exception.company.name}"
+
+		
+= will_paginate @exceptions

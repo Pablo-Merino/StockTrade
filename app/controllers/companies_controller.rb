@@ -6,12 +6,28 @@ class CompaniesController < ApplicationController
 	end
 
 	def show
-		require 'yahoo_stock'
-		@company = Company.find_by(slugged_symbol: params[:id])
-		@articles = Feedzirra::Feed.fetch_and_parse("http://finance.yahoo.com/rss/headline?s=#{@company.slugged_symbol}").entries
-		stock_history = YahooStock::History.new(:stock_symbol => @company.slugged_symbol, :start_date => Date.today-50, :end_date => Date.today-1).results(:to_array).output
-		@history = stock_history.map { |h| h[3] }
-		@yesterday_stats = stock_history.last
+		begin
+			require 'yahoo_stock'
+
+			@company = Company.find_by(slugged_symbol: params[:id])
+			raise Mongoid::Errors::DocumentNotFound.new(Company, slug: params[:id]) if @company.nil?
+
+			@articles = Feedzirra::Feed.fetch_and_parse("http://finance.yahoo.com/rss/headline?s=#{@company.slugged_symbol}").entries
+
+			stock_history = YahooStock::History.new(:stock_symbol => @company.slugged_symbol, :start_date => Date.today-50, :end_date => Date.today-1).results(:to_array).output
+			@history = stock_history.map { |h| h[3] }
+
+			@yesterday_stats = stock_history.last
+
+		rescue YahooStock::Interface::InterfaceError => e
+			@exception = CompanyException.new(:exception_backtrace => e.backtrace, :exception_message => e.message)
+			@exception.company = @company
+			@exception.user = current_user
+			@exception.save
+			render 'errors/internal_server_error', :status => 500
+		rescue Mongoid::Errors::DocumentNotFound
+			render 'errors/not_found', :status => 404
+		end
 	end
 
 	def buy
@@ -101,5 +117,14 @@ class CompaniesController < ApplicationController
 		else
 			redirect_to :back, :alert => "You can't sell less than 1 share!"
 		end
+	end
+
+	def search_gateway
+		redirect_to search_path(params[:company][:search])
+	end
+
+	def search
+		@companies = Company.where(:name => Regexp.new(/#{params[:id]}/i), :symbol => Regexp.new(/#{params[:id]}/i)).paginate(:page => params[:page], :per_page => 20)
+		render 'index'
 	end
 end
