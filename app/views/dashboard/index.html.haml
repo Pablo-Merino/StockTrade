@@ -21,7 +21,7 @@
 									%span{:style=>"color:green"}="#{humanized_money_with_symbol company.share_price} ↑"
 						= form_for Share.new, :url => sell_shares_path(company), :method => :delete do |f|
 							= f.label :amount
-							= f.number_field :amount, :min => 1, :max => company.shares.map { |s| s if s.user == current_user and s.company == company }.count, :onChange => "updatePortfolioWinnings($(this))"
+							= f.number_field :amount, :min => 1, :max => current_user.shares.where(company: company).count, :onChange => "updatePortfolioWinnings($(this))"
 							= f.submit "Sell shares!", :class => "button"
 							.win_estimation{:"data-share_cost" => company.share_price.cents}
 								%p.estimation
