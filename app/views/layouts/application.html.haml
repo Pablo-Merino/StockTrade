@@ -35,6 +35,12 @@
 					%li.divider
 					%li= link_to('Logout', destroy_user_session_path, :method => :delete)
 			- else
+				%ul.left
+					%li.divider
+					%li= link_to "Companies", companies_path
+					%li.divider
+					%li= link_to "Leaderboards", leaderboards_path
+					%li.divider
 				%ul.right
 					%li.divider
 					%li= link_to "About", about_path

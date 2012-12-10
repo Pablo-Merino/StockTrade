@@ -1,5 +1,5 @@
 class CompaniesController < ApplicationController
-	before_filter :authenticate_user!
+	before_filter :authenticate_user!, :except => [:index, :show, :search_gateway, :search]
 	def index
 		@companies = Company.paginate(:page => params[:page], :per_page => 20)
 
@@ -78,7 +78,7 @@ class CompaniesController < ApplicationController
 
 		@company = Company.find_by(slugged_symbol: params[:id])
 		amount = params[:share][:amount].to_i
-		user_shares = @company.shares.map { |s| s if s.user == current_user and s.company == @company }.count
+		user_shares = current_user.shares.where(company: @company).count
 		if amount >= 1
 			if amount > user_shares
 				redirect_to :back, :alert => "You don't have that number of shares!"
